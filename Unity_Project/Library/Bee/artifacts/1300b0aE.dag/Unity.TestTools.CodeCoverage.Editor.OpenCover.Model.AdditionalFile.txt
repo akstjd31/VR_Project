@@ -1,1 +1,1 @@
-C:\Unity\Unity_Project
+/Users/hanmanseong/github/test_repository/VR_Project/Unity_Project

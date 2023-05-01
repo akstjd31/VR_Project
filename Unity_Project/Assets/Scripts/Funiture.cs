@@ -5,26 +5,16 @@ using UnityEngine.UI;
 
 public abstract class Funiture : MonoBehaviour
 {
-
-    public Material origin_mat;
-
-    // ±âÁ¸ °¡±¸ÀÇ ¸ÓÅÍ¸®¾óÀÌ Á¸ÀçÇÏ¸é ÀúÀåÇÏ°í ÀÖÀ½.
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½.
     void Start()
     {
-        origin_mat = this.gameObject.GetComponent<Renderer>().material;
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ °ÔÀÌÁö°¡ ´Ù Âù »óÅÂ±îÁö ¹Ù¶óº¸¸é »ö»ó º¯°æ.
+    // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Â±ï¿½ï¿½ï¿½ ï¿½Ù¶óº¸¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
     public abstract Color ChangetheColor();
 
     public abstract void SetText(Text text);
 
-    // ÇÃ·¹ÀÌ¾îÀÇ ½ÃÁ¡ÀÌ º¯°æµÇ¾úÀ¸¸é ±âÁ¸ °¡±¸ÀÇ ¸ÓÅÍ¸®¾óÀ» °¡Á®¿Â´Ù.
-    public Material SetOriginMaterial()
-    {
-        return origin_mat;
-    }
-
-    // ÇÃ·¹ÀÌ¾î¿Í »óÈ£ÀÛ¿ë
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ 
     public abstract void Interaction(GameObject obj);
 }
