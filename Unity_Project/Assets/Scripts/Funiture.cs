@@ -5,16 +5,13 @@ using UnityEngine.UI;
 
 public abstract class Funiture : MonoBehaviour
 {
-    // ���� ������ ���͸����� �����ϸ� �����ϰ� ����.
-    void Start()
+    public string GetName()
     {
+        return this.name;
     }
 
-    // �÷��̾ �������� �� �� ���±��� �ٶ󺸸� ���� ����.
     public abstract Color ChangetheColor();
 
-    public abstract void SetText(Text text);
-
-    // �÷��̾�� ��ȣ�ۿ� 
-    public abstract void Interaction(GameObject obj);
+    // 플레이어와 가구의 상호작용
+    public abstract bool Interaction(GameObject obj, bool flag);
 }

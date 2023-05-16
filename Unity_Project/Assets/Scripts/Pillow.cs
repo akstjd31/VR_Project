@@ -10,12 +10,18 @@ public class Pillow : Funiture
         return Color.red;
     }
 
-    public override void SetText(Text text)
+    public override bool Interaction(GameObject obj, bool flag)
     {
-        text.text = "Pillow";
-    }
-    public override void Interaction(GameObject obj)
-    {
-        obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + 1.0f, obj.transform.position.z);
+        // 배게를 y축 기준으로 포지션 변경.
+        if (!flag)
+        {
+            obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y + 1.0f, obj.transform.position.z);
+            return true;
+        }
+        else
+        {
+            obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - 1.0f, obj.transform.position.z);
+            return false;
+        }
     }
 }

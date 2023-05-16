@@ -1,23 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Cube : Funiture
 {
 
-    // ±âÁ¸ °¡±¸ÀÇ ¸ÓÅÍ¸®¾óÀÌ Á¸ÀçÇÏ¸é ÀúÀåÇÏ°í ÀÖÀ½.
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½.
     public override Color ChangetheColor()
     {
         return Color.blue;
     }
-
-    public override void SetText(Text text)
+    
+    public override bool Interaction(GameObject obj, bool flag)
     {
-        text.text = "Cube";
-    }
-    public override void Interaction(GameObject obj)
-    {
-        Destroy(obj);
+        return false;
+        // if (flag)
+        //     Destroy(obj);
     }
 }
