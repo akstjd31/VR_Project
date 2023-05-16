@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1440
     height: 900
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Hierarchy
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 18
+  controlID: 127
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 19
+  controlID: 128
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -628,9 +628,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 4.0755777, y: 6.7617035, z: -2.5240269}
+    m_Target: {x: -17.227335, y: -13.288101, z: 0.82968193}
     speed: 2
-    m_Value: {x: 4.0755777, y: 6.7617035, z: -2.5240269}
+    m_Value: {x: -17.227335, y: -13.288101, z: 0.82968193}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -656,7 +656,7 @@ MonoBehaviour:
         m_Value: 0
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
-      m_Size: {x: 0, y: 0}
+      m_Size: {x: 1, y: 1}
     yGrid:
       m_Fade:
         m_Target: 1
@@ -677,13 +677,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.19156854, y: -0.16547142, z: 0.03278503, w: 0.9668811}
+    m_Target: {x: 0.3623377, y: -0.555224, z: 0.29181218, w: 0.68941516}
     speed: 2
-    m_Value: {x: 0.19156729, y: -0.16547033, z: 0.032784812, w: 0.9668748}
+    m_Value: {x: 0.36233595, y: -0.55522126, z: 0.29181075, w: 0.68941176}
   m_Size:
-    m_Target: 0.64198506
+    m_Target: 11.264114
     speed: 2
-    m_Value: 0.64198506
+    m_Value: 11.264114
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -854,23 +854,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: d85c0000
-      m_LastClickedID: 23768
-      m_ExpandedIDs: 98f8ffffc6f8fffffafaffff04fbffff06fbffffb85c0000cc5c0000d85c0000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 6c6bffff726bffff866bffff2e71ffff4271ffff4871ffff5271ffff307affff3a7affff96daffff9adaffffd2dbffff34ddffff64deffffaedefffffafaffff04fbffff06fbffffc65c0000de5c0000ec5c0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Key_01
+        m_OriginalName: Key_01
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: -92428
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 9}
       m_SearchString: 
@@ -921,22 +921,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Plugins
+    - Assets/Scripts
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Plugins
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/hanmanseong/github/test_repository/VR_Project/Unity_Project
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 7c610000
-    m_LastClickedID: 24956
-    m_ExpandedIDs: 000000007461000076610000786100007a6100007c6100007e6100008061000082610000846100008661000000ca9a3b
+    m_SelectedIDs: c2610000
+    m_LastClickedID: 25026
+    m_ExpandedIDs: 000000008e61000090610000926100009461000096610000986100009a6100009c6100009e610000a0610000a8610000ac610000c261000032d00000e4d10000e6d10000a8d2000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -964,7 +964,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000007461000076610000786100007a6100007c6100007e61000080610000826100008461000086610000
+    m_ExpandedIDs: 000000008e61000090610000926100009461000096610000986100009a6100009c6100009e610000a0610000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
