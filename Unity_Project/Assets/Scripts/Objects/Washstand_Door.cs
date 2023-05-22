@@ -32,16 +32,4 @@ public class Washstand_Door : Funiture
             return false;
         }
     }
-
-    // IEnumerator opening()
-	// {
-	// 	openandclose.Play("Opening");
-	// 	yield return new WaitForSeconds(.5f);
-	// }
-
-	// IEnumerator closing()
-	// {
-	// 	openandclose.Play("Closing");
-	// 	yield return new WaitForSeconds(.5f);
-	// }
 }

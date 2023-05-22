@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Object
+  - Coin
+  - Floor
+  - Game
   layers:
   - Default
   - TransparentFX

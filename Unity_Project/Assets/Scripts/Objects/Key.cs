@@ -13,13 +13,10 @@ public class Key : Funiture
     {
         if (!flag)
         {
-            PlayerManager.count++;
+            PlayerManager.Instance.count++;
             Destroy(obj);
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }

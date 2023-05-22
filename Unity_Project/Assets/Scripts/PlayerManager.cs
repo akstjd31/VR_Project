@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 
 ////////////////////////////////////////////////////////
 ////// **** 주의 사항 ****
@@ -21,7 +21,9 @@ public enum OBJECTS
     WASHSTAND_DRAWER_01, WASHSTAND_DRAWER_02, WASHSTAND_DRAWER_03, WASHSTAND_DOOR_01, WASHSTAND_DOOR_02,
     BROILER_DOOR, OVEN_DOOR,
     DRESSER_CLOSET_DOOR_L, DRESSER_CLOSET_DOOR_R,
-    KEY_01
+    BALL_GAME_MAP,
+    KEY_01, KEY_02,
+    
 }
 
 public class PlayerManager : MonoBehaviour
@@ -31,23 +33,57 @@ public class PlayerManager : MonoBehaviour
     public Image PointerGaugeImage;
     public Material mat; // Shader : Unlit/Color
     public Funiture[] funitures; // 가구들을 담은 배열
-    private bool[] funitures_check; // 가구들의 상호작용 체크
+    
     // private Dictionary<string, bool> funiture_check;
     public Text textMessage, keyCountText;
-    private GameObject origin_obj;
+    public GameObject lockText;
+    [SerializeField] private GameObject origin_obj;
     [SerializeField] private Material origin_col_obj_mat; // 기존 상호작용이 가능한 오브젝트의 머티리얼을 저장.
+    private static PlayerManager instance = null;
+
+    public int count = 0; // 열쇠의 개수
 
     public float speed = 3;
-    [SerializeField] public static int count = 0;
     private float GaugeTimer;
     private float dist;
 
+    private bool[] funitures_check; // 가구들의 상호작용 체크
     private bool isMove = false; // 움직일 수 있는 상태를 나타내는 변수
     private bool isFull = false; // 게이지가 완전히 채워졌는지 확인하는 변수
     private bool mat_check = false; // 해당 오브젝트의 색상을 초반에 한번만 저장해놓기 위한 변수
+    private bool isKey = false;
 
     private string obj_nm;
     private int curIdx, pastIdx;
+
+    private Stack<GameObject> obj_stack = new Stack<GameObject>();
+    void Awake()
+    {
+        if (null == instance)
+        {
+            instance = this;
+
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    // 싱글톤 패턴
+    public static PlayerManager Instance
+    {
+        get
+        {
+            if (null == instance)
+            {
+                return null;
+            }
+            return instance;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -73,31 +109,30 @@ public class PlayerManager : MonoBehaviour
         // 나중에 가구는 추가되면 해당 가구가 어떤 가구인지 판별 후에 인덱스 값 결정
         if (Physics.Raycast(ray, out hit, 500.0f) && hit.collider.gameObject.CompareTag("Object"))
         {
-            dist = Vector3.Distance(hit.collider.gameObject.transform.position, this.transform.position);
             if (pastIdx == -1 || pastIdx != curIdx)
             {
-                pastIdx = curIdx;
                 GaugeTimer = 0.0f;
+                pastIdx = curIdx;
+                mat_check = false;
+
+                // 스택이 존재한다면 저장된 스택 오브젝트 머티리얼을 기존 머티리얼로 변경
+                if (obj_stack.Count > 0) obj_stack.Pop().GetComponent<Renderer>().material = origin_col_obj_mat;
+                if (isKey) isKey = false;
             }
 
-            // 만약, 해당 오브젝트를 바라보다가 else문으로 넘어가지 않고 바로 다른 오브젝트를 바라보는 경우, 기존 머티리얼 적용. (중요)
-            if (origin_obj != null) 
+            // 가구를 처음으로 바라봤으며 처음 1번만 기록
+            if (!mat_check)
             {
-                origin_obj.GetComponent<Renderer>().material = origin_col_obj_mat;
+                origin_col_obj_mat = hit.collider.gameObject.GetComponent<Renderer>().material;
+                mat_check = true;
             }
+
+            dist = Vector3.Distance(hit.collider.gameObject.transform.position, this.transform.position);
 
             // 현재 가구의 인덱스를 저장.
             curIdx = CheckObjectIndex(hit.collider.gameObject);
 
-            // 가구를 처음으로 바라봤으며 처음 1번만 기록
-            if (origin_col_obj_mat == null || !mat_check)
-            {
-                if (curIdx != (int)OBJECTS.KEY_01) origin_col_obj_mat = hit.collider.gameObject.GetComponent<Renderer>().material;
-                mat_check = true;
-            }
-
-            if (pastIdx == -1)
-                pastIdx = curIdx;
+            if (curIdx >= (int)OBJECTS.KEY_01) isKey = true;
 
             // 해당 오브젝트(가구)의 이름 세팅
             textMessage.text = funitures[curIdx].GetName();
@@ -110,6 +145,7 @@ public class PlayerManager : MonoBehaviour
                 GaugeTimer += 1.0f / 3.0f * Time.deltaTime;
                 isMove = false;
             }
+
             else 
             {
                 if (Input.GetMouseButtonDown(0))
@@ -120,10 +156,10 @@ public class PlayerManager : MonoBehaviour
 
             if (GaugeTimer >= 1.0f)
             {
-                // 오브젝트를 해당 가구의 색상에 매핑한 것으로 변경
                 origin_obj = hit.collider.gameObject;
-                
-                hit.collider.gameObject.GetComponent<Renderer>().material = mat;
+                if (obj_stack.Count == 0) obj_stack.Push(origin_obj);
+
+                obj_stack.Peek().GetComponent<Renderer>().material = mat;
                 
                 if (Input.GetMouseButtonDown(0))
                     isFull = true;
@@ -132,7 +168,39 @@ public class PlayerManager : MonoBehaviour
                 {
                     // 가구 상호작용
                     funitures_check[curIdx] = funitures[curIdx].Interaction(origin_obj, funitures_check[curIdx]);
-                    origin_obj.GetComponent<Renderer>().material = origin_col_obj_mat;
+                    if (isKey) obj_stack.Clear();
+
+                    isFull = false;
+                    GaugeTimer = 0.0f;
+                }  
+            }
+        }
+        else if (Physics.Raycast(ray, out hit, 500.0f) && hit.collider.gameObject.CompareTag("Game"))
+        {
+            dist = Vector3.Distance(hit.collider.gameObject.transform.position, this.transform.position);
+
+            curIdx = CheckObjectIndex(hit.collider.gameObject);
+
+            textMessage.text = funitures[curIdx].GetName();
+            
+            // 현재 오브젝트와의 거리가 3.5이내일 때 게이지 충전
+            if (dist <= 3.5f)
+            {
+                GaugeTimer += 1.0f / 3.0f * Time.deltaTime;
+                isMove = false;
+            }
+
+            if (GaugeTimer >= 1.0f)
+            {
+                if (Input.GetMouseButtonDown(0))
+                    isFull = true;
+
+                if (isFull && Input.GetMouseButtonUp(0))
+                {
+                    // 가구 상호작용
+                    funitures_check[curIdx] = funitures[curIdx].Interaction(origin_obj, funitures_check[curIdx]);
+                    // SceneManager.LoadScene("")
+                    DataManager.Instance.SaveGameData();
 
                     isFull = false;
                     GaugeTimer = 0.0f;
@@ -142,16 +210,14 @@ public class PlayerManager : MonoBehaviour
 
         else
         {
-
-            if (origin_obj != null)
+            if (obj_stack.Count > 0)
             {
-                origin_obj.GetComponent<Renderer>().material = origin_col_obj_mat;
-                // origin_col_obj_mat = null;
+                obj_stack.Pop().GetComponent<Renderer>().material = origin_col_obj_mat;
             }
             
             GaugeTimer = 0.0f;
+            textMessage.color = Color.white;
             textMessage.text = "Touch to Move";
-            textMessage.color = Color.black;
             mat_check = false;
 
             // 과거 인덱스 저장
@@ -175,12 +241,6 @@ public class PlayerManager : MonoBehaviour
         dir.y = 0;
 
         this.transform.position += dir * Time.deltaTime * speed;
-
-    }
-
-    public void AddCount()
-    {
-        count++;
     }
 
     // 현재 가구가 어떤 가구인지 체크
@@ -220,8 +280,24 @@ public class PlayerManager : MonoBehaviour
                 return (int)OBJECTS.DRESSER_CLOSET_DOOR_R;
             case "Key_01":
                 return (int)OBJECTS.KEY_01;
+            case "Key_02":
+                return (int)OBJECTS.KEY_02;
+            case "Ball_Game_Map":
+                return (int)OBJECTS.BALL_GAME_MAP;
 
         }
         return -1;
+    }
+
+
+    // 해당 텍스트의 사라짐 효과
+    public IEnumerator FadeTextToZero(Text text)
+    {
+        text.color = new Color(text.color.r, text.color.g, text.color.b, 1);
+        while (text.color.a > 0.0f)
+        {
+            text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - (Time.deltaTime / 1.0f));
+            yield return null;
+        }
     }
 }
