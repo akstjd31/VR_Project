@@ -11,25 +11,24 @@ public class Washstand_Door : Funiture
         return new Color(255f/255f, 165f/255f, 0); // orange
     }
 
-    public override bool Interaction(GameObject obj, bool flag)
+    public override void Interaction()
     {
-        if (!flag)
-        {
-            // 서로 축마다 열리는 방향이 다르기 때문에 다른 애니메이션을 사용한듯?
-            if (obj.name == "Washstand_Door_01")
-                obj.GetComponent<Animator>().Play("Opening");
-            else
-                obj.GetComponent<Animator>().Play("Opening 1");
-            return true;
-        }
-        else
-        {
-            if (obj.name == "Washstand_Door_01")
-                obj.GetComponent<Animator>().Play("Closing");
-            else
-                obj.GetComponent<Animator>().Play("Closing 1");
-            // StartCoroutine(closing());
-            return false;
+        StartCoroutine(Open_And_Close());
+    }
+
+    IEnumerator Open_And_Close()
+    {
+        switch (this.name) {
+            case "Closet_Door_L":
+                this.transform.GetComponent<Animator>().Play("Opening");
+                yield return new WaitForSeconds(delayTime);
+                this.transform.GetComponent<Animator>().Play("Closing");
+                break;
+            default:
+                this.transform.GetComponent<Animator>().Play("Opening 1");
+                yield return new WaitForSeconds(delayTime);
+                this.transform.GetComponent<Animator>().Play("Closing 1");
+                break;
         }
     }
 }

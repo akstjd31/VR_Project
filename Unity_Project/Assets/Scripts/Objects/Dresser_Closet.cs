@@ -5,29 +5,42 @@ using UnityEngine.UI;
 
 public class Dresser_Closet : Funiture
 {
+    private bool isOpened = false;
     public override Color ChangetheColor()
     {
         return Color.yellow;
     }
 
-    public override bool Interaction(GameObject obj, bool flag)
+    public override void Interaction()
     {
-        if (!flag)
+        if (!isOpened)
         {
-            // 서로 축마다 열리는 방향이 다르기 때문에 다른 애니메이션을 사용한듯?
-            if (obj.name == "Closet_Door_L")
-                obj.GetComponent<Animator>().Play("Opening");
-            else
-                obj.GetComponent<Animator>().Play("Opening 1");
-            return true;
+            StartCoroutine(Open_And_Close());
         }
+            
         else
         {
-            if (obj.name == "Closet_Door_L")
-                obj.GetComponent<Animator>().Play("Closing");
-            else
-                obj.GetComponent<Animator>().Play("Closing 1");
-            return false;
+            if (PlayerManager.Instance.fadeText.GetComponent<Text>().text != "isOpened!")
+                PlayerManager.Instance.fadeText.GetComponent<Text>().text = "isOpened!";
+            StartCoroutine(PlayerManager.Instance.FadeTextToZero(PlayerManager.Instance.fadeText.GetComponent<Text>()));
         }
+    }
+
+    IEnumerator Open_And_Close()
+    {
+        isOpened = true;
+        switch (this.name) {
+            case "Closet_Door_L":
+                this.transform.GetComponent<Animator>().Play("Opening");
+                yield return new WaitForSeconds(delayTime);
+                this.transform.GetComponent<Animator>().Play("Closing");
+                break;
+            default:
+                this.transform.GetComponent<Animator>().Play("Opening 1");
+                yield return new WaitForSeconds(delayTime);
+                this.transform.GetComponent<Animator>().Play("Closing 1");
+                break;
+        }
+        isOpened = false;
     }
 }

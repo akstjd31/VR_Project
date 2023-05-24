@@ -31,18 +31,15 @@ public class PlayerManager : MonoBehaviour
     public Transform player;
     public Vector3 SceenCenter;
     public Image PointerGaugeImage;
+    public Image fadePanel;
     public Material mat; // Shader : Unlit/Color
     public Funiture[] funitures; // 가구들을 담은 배열
-    
-    // private Dictionary<string, bool> funiture_check;
-    public Text textMessage, keyCountText;
-    public GameObject lockText;
+    public Text textMessage, keyCountText, fadeText;
     [SerializeField] private GameObject origin_obj;
     [SerializeField] private Material origin_col_obj_mat; // 기존 상호작용이 가능한 오브젝트의 머티리얼을 저장.
     private static PlayerManager instance = null;
 
-    public int count = 0; // 열쇠의 개수
-
+    public float fadeTime = 0.0f;
     public float speed = 3;
     private float GaugeTimer;
     private float dist;
@@ -52,8 +49,11 @@ public class PlayerManager : MonoBehaviour
     private bool isFull = false; // 게이지가 완전히 채워졌는지 확인하는 변수
     private bool mat_check = false; // 해당 오브젝트의 색상을 초반에 한번만 저장해놓기 위한 변수
     private bool isKey = false;
+    private bool fadeIn = false;
 
     private string obj_nm;
+
+    public int count = 0; // 열쇠의 개수
     private int curIdx, pastIdx;
 
     private Stack<GameObject> obj_stack = new Stack<GameObject>();
@@ -95,6 +95,7 @@ public class PlayerManager : MonoBehaviour
             funitures_check[i] = false;
 
         pastIdx = -1;
+        fadePanel.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -103,7 +104,7 @@ public class PlayerManager : MonoBehaviour
         keyCountText.text = "Key: " + count;
         
         Ray ray = Camera.main.ScreenPointToRay(SceenCenter);
-        RaycastHit hit; 
+        RaycastHit hit;
         //Physics.Raycast(player.transform.position, player.forward, out hit, 10);
         PointerGaugeImage.fillAmount = GaugeTimer;
         // 나중에 가구는 추가되면 해당 가구가 어떤 가구인지 판별 후에 인덱스 값 결정
@@ -142,7 +143,7 @@ public class PlayerManager : MonoBehaviour
             // 현재 오브젝트와의 거리가 3.5이내일 때 게이지 충전
             if (dist <= 3.5f)
             {
-                GaugeTimer += 1.0f / 3.0f * Time.deltaTime;
+                GaugeTimer += 1.0f / 2.0f * Time.deltaTime;
                 isMove = false;
             }
 
@@ -167,7 +168,8 @@ public class PlayerManager : MonoBehaviour
                 if (isFull && Input.GetMouseButtonUp(0))
                 {
                     // 가구 상호작용
-                    funitures_check[curIdx] = funitures[curIdx].Interaction(origin_obj, funitures_check[curIdx]);
+                    funitures[curIdx].Interaction();
+
                     if (isKey) obj_stack.Clear();
 
                     isFull = false;
@@ -186,7 +188,7 @@ public class PlayerManager : MonoBehaviour
             // 현재 오브젝트와의 거리가 3.5이내일 때 게이지 충전
             if (dist <= 3.5f)
             {
-                GaugeTimer += 1.0f / 3.0f * Time.deltaTime;
+                GaugeTimer += 1.0f / 2.0f * Time.deltaTime;
                 isMove = false;
             }
 
@@ -198,9 +200,7 @@ public class PlayerManager : MonoBehaviour
                 if (isFull && Input.GetMouseButtonUp(0))
                 {
                     // 가구 상호작용
-                    funitures_check[curIdx] = funitures[curIdx].Interaction(origin_obj, funitures_check[curIdx]);
-                    // SceneManager.LoadScene("")
-                    DataManager.Instance.SaveGameData();
+                    funitures[curIdx].Interaction();
 
                     isFull = false;
                     GaugeTimer = 0.0f;
@@ -223,7 +223,7 @@ public class PlayerManager : MonoBehaviour
             // 과거 인덱스 저장
             pastIdx = curIdx;
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && fadeTime >= 1.9f)
                 isMove = true;
             else if (Input.GetMouseButtonUp(0))
                 isMove = false;
@@ -233,6 +233,8 @@ public class PlayerManager : MonoBehaviour
         {
             Movement();
         }
+
+        PlayFadeIn(fadePanel);
     }
     private void Movement()
     {
@@ -299,5 +301,19 @@ public class PlayerManager : MonoBehaviour
             text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - (Time.deltaTime / 1.0f));
             yield return null;
         }
+    }
+    void PlayFadeIn(Image img)  
+    {  
+        // 경과 시간 계산.  
+        // 2초(animTime)동안 재생될 수 있도록 animTime으로 나누기. 
+        if (fadeTime <= 2.0f) 
+            fadeTime += Time.deltaTime / 2.0f;  
+
+        // Image 컴포넌트의 색상 값 읽어오기.  
+        Color color = img.color;
+        // 알파 값 계산.  
+        color.a = Mathf.Lerp(1.0f, 0.0f, fadeTime);  
+        // 계산한 알파 값 다시 설정.  
+        img.color = color;
     }
 }

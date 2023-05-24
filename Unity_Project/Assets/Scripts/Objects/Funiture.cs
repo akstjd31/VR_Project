@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public abstract class Funiture : MonoBehaviour
 {
+    public float delayTime = 5.0f;
     public string GetName()
     {
         return this.name;
@@ -13,5 +14,5 @@ public abstract class Funiture : MonoBehaviour
     public abstract Color ChangetheColor();
 
     // 플레이어와 가구의 상호작용
-    public abstract bool Interaction(GameObject obj, bool flag);
+    public abstract void Interaction();
 }

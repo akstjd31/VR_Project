@@ -5,22 +5,33 @@ using UnityEngine.UI;
 
 public class Drawer_Table : Funiture
 {
+    private bool isOpened = false;
     public override Color ChangetheColor()
     {
         return Color.green;
     }
 
-    public override bool Interaction(GameObject obj, bool flag)
+    public override void Interaction()
     {
-        if (!flag)
+        if (!isOpened)
         {
-            obj.transform.parent.GetComponent<Animator>().Play("openpull_01");
-            return true;
+            StartCoroutine(Open_And_Close());
         }
+            
         else
         {
-            obj.transform.parent.GetComponent<Animator>().Play("closepush_01");
-            return false;
+            if (PlayerManager.Instance.fadeText.GetComponent<Text>().text != "isOpened!")
+                PlayerManager.Instance.fadeText.GetComponent<Text>().text = "isOpened!";
+            StartCoroutine(PlayerManager.Instance.FadeTextToZero(PlayerManager.Instance.fadeText.GetComponent<Text>()));
         }
+    }
+
+    IEnumerator Open_And_Close()
+    {
+        isOpened = true;
+        this.transform.parent.GetComponent<Animator>().Play("openpull_01");
+        yield return new WaitForSeconds(delayTime);
+        this.transform.parent.GetComponent<Animator>().Play("closepush_01");
+        isOpened = false;
     }
 }

@@ -5,35 +5,33 @@ using UnityEngine.UI;
 
 public class Oven : Funiture
 {
+    private bool isOpened = false;
     public override Color ChangetheColor()
     {
         return Color.cyan;
     }
 
-    public override bool Interaction(GameObject obj, bool flag)
+    public override void Interaction()
     {
-        if (!flag)
+        if (!isOpened)
         {
-            switch (obj.name) {
-                case "Broiler_Door":
-                case "Oven_Door":
-                    obj.GetComponent<Animator>().Play("OpenOven");
-                    break;
-            }
-
-            return true;
+            StartCoroutine(Open_And_Close());
         }
+            
         else
         {
-            switch (obj.name) {
-                case "Broiler_Door":
-                case "Oven_Door":
-                    obj.GetComponent<Animator>().Play("ClosingOven");
-                    break;
-            
-            }
-
-            return false;
+            if (PlayerManager.Instance.fadeText.GetComponent<Text>().text != "isOpened!")
+                PlayerManager.Instance.fadeText.GetComponent<Text>().text = "isOpened!";
+            StartCoroutine(PlayerManager.Instance.FadeTextToZero(PlayerManager.Instance.fadeText.GetComponent<Text>()));
         }
+    }
+
+    IEnumerator Open_And_Close()
+    {
+        isOpened = true;
+        this.transform.GetComponent<Animator>().Play("OpenOven");
+        yield return new WaitForSeconds(delayTime);
+        this.transform.GetComponent<Animator>().Play("ClosingOven");
+        isOpened = false;
     }
 }

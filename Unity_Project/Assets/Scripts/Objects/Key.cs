@@ -9,14 +9,9 @@ public class Key : Funiture
         return Color.magenta;
     }
 
-    public override bool Interaction(GameObject obj, bool flag)
+    public override void Interaction()
     {
-        if (!flag)
-        {
-            PlayerManager.Instance.count++;
-            Destroy(obj);
-            return true;
-        }
-        return false;
+        PlayerManager.Instance.count++;
+        Destroy(this.gameObject);
     }
 }
