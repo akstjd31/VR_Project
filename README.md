@@ -1,4 +1,5 @@
-# VR_Project
+# VR 방탈출 게임(Room Escape Game)
+- Google Cardboard를 이용하여 각종 게임들과 주변 힌트들을 조합하여 최종적으로 열쇠를 얻어 방을 탈출하는 게임.
 
-<img src="https://img.shields.io/badge/c%23-%23239120.svg?style=flat-square&logo=c-sharp&logoColor=white">
-<img src="https://img.shields.io/badge/unity-%23000000.svg?style=flat-square&logo=unity&logoColor=white">
+
+
